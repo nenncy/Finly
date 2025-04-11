@@ -17,9 +17,7 @@ export type RootDrawerParamList = {
   income: undefined;
 };
 
-
-
-const IncomeScreen: React.FC = () => {
+const ExpenseScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
@@ -127,7 +125,7 @@ const IncomeScreen: React.FC = () => {
   );
 }
 
-export default IncomeScreen;
+export default ExpenseScreen;
 
 const styles = StyleSheet.create({
   container: {

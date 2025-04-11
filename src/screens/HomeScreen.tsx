@@ -57,7 +57,7 @@ const HomeScreen: React.FC= () => (
  <SafeAreaView style={styles.container}>
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
     <View style={styles.container}>
-    <Text style={styles.header}>Home</Text>
+    {/* <Text style={styles.header}>Home</Text> */}
 
     <View style={styles.card}>
       <Text style={styles.label}>Total Transactions:</Text>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#f5f5f5',
       paddingHorizontal: 20,
+      marginVertical:28
     },
     header: {
       fontSize: 28,
