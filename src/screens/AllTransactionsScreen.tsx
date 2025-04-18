@@ -26,11 +26,11 @@ const transactions: Transaction[] = [
 const AllTransactionsScreen: React.FC = () => {
     return (
         <View style={styles.container}>
-            {/* <Text style={styles.title}>All Transactions</Text> */}
+            <Text style={styles.title}>All Transactions</Text>
             <ScrollView style={{ padding: 20 }}>
-                <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>
+                {/* <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>
                     All Transactions
-                </Text>
+                </Text> */}
                 {transactions.map((tx) => (
                     <View key={tx.id} style={{ padding: 12, backgroundColor: '#fff', marginBottom: 10, borderRadius: 8 }}>
                         <Text style={{ fontWeight: 'bold' }}>{tx.title}</Text>
