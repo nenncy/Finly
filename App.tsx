@@ -7,11 +7,13 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from './src/screens/HomeScreen';
 import IncomeScreen from './src/screens/IncomeScreen';
 import ExpenseScreen from './src/screens/ExpenseScreen';
+import AllTransactionsScreen from './src/screens/AllTransactionsScreen';
 
 export type RootDrawerParamList = {
     Home: undefined;
     income: undefined;
     expense: undefined
+    allTransactions: undefined;
 
   };
 
@@ -24,6 +26,7 @@ export default function App() {
         <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="income" component={IncomeScreen} />
         <Drawer.Screen name="expense" component={ExpenseScreen} />
+        <Drawer.Screen name="allTransactions" component={AllTransactionsScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

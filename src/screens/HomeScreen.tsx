@@ -5,15 +5,16 @@ import {  View,
     FlatList,
     SafeAreaView,
     ScrollView,
-    Button
+    Button,
+    TouchableOpacity
 } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
+import { NavigationContainer , useNavigation } from "@react-navigation/native";
+import { RootDrawerParamList } from '../../App';
 
-// types.ts
-export type RootDrawerParamList = {
-    Home: undefined;
-    Settings: undefined;
-  };
+type Props = DrawerScreenProps<RootDrawerParamList, 'Home'>;
+
+// Removed duplicate declaration of RootDrawerParamList
 
   interface TransactionSummary {
     totalTransactions: number;
@@ -21,8 +22,6 @@ export type RootDrawerParamList = {
     expense: number;
   }
   
-
-
   interface Transaction {
     id: string;
     title: string;
@@ -37,6 +36,12 @@ export type RootDrawerParamList = {
     { id: '2', title: 'Paycheck', amount: 900, type: 'income', categoryId: 'salary', date: '2025-03-31' },
     { id: '3', title: 'Uber Ride', amount: 14, type: 'expense', categoryId: 'transport', date: '2025-03-30' },
     { id: '4', title: 'Groceries', amount: 54.75, type: 'expense', categoryId: 'grocery', date: '2025-03-29' },
+    { id: '5', title: 'Netflix Subscription', amount: 12.99, type: 'expense', categoryId: 'entertainment', date: '2025-03-28' },
+    { id: '6', title: 'Freelance Payment', amount: 300, type: 'income', categoryId: 'freelance', date: '2025-03-27' },
+    { id: '7', title: 'Gas Station', amount: 40, type: 'expense', categoryId: 'transport', date: '2025-03-26' },
+    { id: '8', title: 'Restaurant Dinner', amount: 65.2, type: 'expense', categoryId: 'food', date: '2025-03-25' },
+    { id: '9', title: 'Electricity Bill', amount: 110.5, type: 'expense', categoryId: 'utilities', date: '2025-03-24' },
+    { id: '10', title: 'Monthly Bonus', amount: 200, type: 'income', categoryId: 'bonus', date: '2025-03-23' },
   ];
 
   const summary = {
@@ -46,14 +51,14 @@ export type RootDrawerParamList = {
       .reduce((sum, t) => sum + t.amount, 0),
     expense: transactions
       .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0),
+      .reduce((sum, t) => sum + t.amount, 0).toFixed(2),
+  
   };
   
   
 
 
-
-const HomeScreen: React.FC= () => (
+const HomeScreen: React.FC<Props>= ({navigation}: any) => (
  <SafeAreaView style={styles.container}>
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
     <View style={styles.container}>
@@ -77,7 +82,7 @@ const HomeScreen: React.FC= () => (
     </View>
     <Text style={styles.sectionTitle}>Recent Transactions</Text>
     <FlatList
-          data={transactions}
+          data={transactions.slice(0,4)}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.transactionItem}>
@@ -91,6 +96,9 @@ const HomeScreen: React.FC= () => (
             </View>
           )}
         />
+        <TouchableOpacity onPress={() => navigation.navigate('allTransactions')} >
+           <Text style={styles.showAllText}>Show All Transactions</Text>
+        </TouchableOpacity>
   </View>
       </ScrollView>
       </SafeAreaView>
@@ -165,6 +173,18 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#888',
         marginTop: 4,
+      }
+      ,
+      showAllText:{
+        color: 'black',
+        fontWeight: 'light',
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 10,
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 8,
+        elevation: 1,
       }
       
   });
