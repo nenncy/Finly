@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View,
   Text,
   TextInput,
@@ -11,6 +11,9 @@ import { useNavigation, } from '@react-navigation/native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useForm } from 'react-hook-form';
 import { Picker } from "@react-native-picker/picker";
+import { useMutation } from '@apollo/client';
+import { ADD_INCOME } from '../graphql/mutations'; // adjust the path
+
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -20,6 +23,7 @@ export type RootDrawerParamList = {
 
 
 const IncomeScreen: React.FC = () => {
+  const [addIncome , {loading , error , data}] = useMutation(ADD_INCOME)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
@@ -50,10 +54,30 @@ const IncomeScreen: React.FC = () => {
   };
 
   console.log('Income Added:', incomeData);
-  const onSubmit = () => {
 
+  const onSubmit =  async () => {
+  const variables = {
+    title: category === 'Other' ? customcategory : category,
+    amount: parseFloat(amount),
+    date: selectedDate.toISOString(),
+    notes: note,
+    category_id: 1 // Optional: Add dynamic category IDs if needed
+  };
+
+  try {
+    const response = await addIncome({ variables });
+    console.log('✅ Income added:', response.data.addIncome);
+    // You can clear the form or navigate here
+    setAmount('');
+    setCategory('');
+    setCustomCategory('');
+    setNote('');
+    alert('Income added successfully!');
+  } catch (err) {
+    console.error('❌ Error adding income:', err);
+    alert('Failed to add income.');
   }
- 
+};
 
   return (
     <View style={{ flex: 1, justifyContent: 'flex-start',  marginVertical:28}}>
@@ -121,6 +145,9 @@ const IncomeScreen: React.FC = () => {
         <TouchableOpacity style={styles.button} onPress={onSubmit}>
           <Text style={styles.buttonText}>Add Income</Text>
         </TouchableOpacity>
+        {loading && <Text>Submitting...</Text>}
+        {error && <Text style={{ color: 'red' }}>Error: {error.message}</Text>}
+        {data && <Text style={{ color: 'green' }}>Income added successfully!</Text>}
       </ScrollView>
     </KeyboardAvoidingView>
     </View>

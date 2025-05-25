@@ -1,5 +1,6 @@
 import { registerRootComponent } from 'expo';
-
+import { ApolloProvider } from '@apollo/client';
+import client from './apolloClient'; // Adjust the path as necessary
 import App from './App';
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
