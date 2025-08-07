@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View,
   Text,
   TextInput,
@@ -11,8 +11,9 @@ import { useNavigation, } from '@react-navigation/native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useForm } from 'react-hook-form';
 import { Picker } from "@react-native-picker/picker";
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { ADD_INCOME } from '../graphql/mutations'; // adjust the path
+import { GET_CATEGORIES } from "../graphql/query";
 
 
 export type RootDrawerParamList = {
@@ -24,13 +25,24 @@ export type RootDrawerParamList = {
 
 const IncomeScreen: React.FC = () => {
   const [addIncome , {loading , error , data}] = useMutation(ADD_INCOME)
+  // const [category , {loading:catLoading , error:catError , data:catData}] = useMutation(GET_CATEGORIES)
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const { loading: catLoading, error: catError, data: catData } = useQuery(GET_CATEGORIES);
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<string[]>([]);
   const [customcategory, setCustomCategory] = useState('');
 
   const [note, setNote] = useState('');
 
+  useEffect(() => {
+    // Fetch categories when the component mounts
+   
+    if (!catLoading && catData && catData.getCategories) {
+    console.log("Categories data:", catData.getCategories); // ✅ Should print now
+    const categoryNames = catData.getCategories.map((cat: { name: string }) => cat.name);
+    setCategory(categoryNames);
+  }
+  }, [catData]);
   const categoriesList = ['Salary', 'Freelance', 'Bonus', 'Gift', 'Other'];
 
 
@@ -53,11 +65,10 @@ const IncomeScreen: React.FC = () => {
     date: new Date().toISOString(),
   };
 
-  console.log('Income Added:', incomeData);
 
   const onSubmit =  async () => {
   const variables = {
-    title: category === 'Other' ? customcategory : category,
+    // title: category === 'Other' ? customcategory : category,
     amount: parseFloat(amount),
     date: selectedDate.toISOString(),
     notes: note,
@@ -69,7 +80,7 @@ const IncomeScreen: React.FC = () => {
     console.log('✅ Income added:', response.data.addIncome);
     // You can clear the form or navigate here
     setAmount('');
-    setCategory('');
+    // setCategory('');
     setCustomCategory('');
     setNote('');
     alert('Income added successfully!');
@@ -115,21 +126,21 @@ const IncomeScreen: React.FC = () => {
             onValueChange={(itemValue) => setCategory(itemValue)}
           >
             <Picker.Item label="Select Category" value="" />
-            {categoriesList.map((cat, index) => (
+            {category.map((cat, index) => (
               <Picker.Item key={index} label={cat} value={cat} />
             ))}
           </Picker>
         </View>
 
-        {
+        {/* {
           incomeData.category == "Other" ?  <TextInput
           style={styles.input}
           placeholder="Enter New Category"
           value={customcategory}
           onChangeText={setCustomCategory}
           multiline
-        /> : <></>
-        }
+        /> : <></> */}
+        {/* } */}
 
         {/* Note */}
         <Text style={styles.label}>Note</Text>

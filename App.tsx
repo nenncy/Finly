@@ -15,7 +15,7 @@ export type RootDrawerParamList = {
   Home: undefined;
   income: undefined;
   expense: undefined
-  allTransactions: undefined;
+  Transactions: undefined;
 
 };
 
@@ -29,7 +29,7 @@ export default function App() {
           <Drawer.Screen name="Home" component={HomeScreen} />
           <Drawer.Screen name="income" component={IncomeScreen} />
           <Drawer.Screen name="expense" component={ExpenseScreen} />
-          <Drawer.Screen name="allTransactions" component={AllTransactionsScreen} />
+          <Drawer.Screen name="Transactions" component={AllTransactionsScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
     </ApolloProvider>
